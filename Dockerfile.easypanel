@@ -27,8 +27,14 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-COPY --from=builder /app/public ./public
+# IMPORTANTE: Copiar en el orden correcto para que no se sobrescriban
+# 1. Primero standalone (contiene server.js y estructura base)
 COPY --from=builder /app/.next/standalone ./
+
+# 2. Luego public (para que no se sobrescriba con standalone)
+COPY --from=builder /app/public ./public
+
+# 3. Finalmente static (archivos CSS, JS, etc.)
 COPY --from=builder /app/.next/static ./.next/static
 
 EXPOSE 3000

@@ -42,9 +42,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Copiar archivos necesarios
-COPY --from=builder /app/public ./public
+# Copiar archivos necesarios (ORDEN IMPORTANTE)
+# 1. Primero standalone
 COPY --from=builder /app/.next/standalone ./
+# 2. Luego public
+COPY --from=builder /app/public ./public
+# 3. Finalmente static
 COPY --from=builder /app/.next/static ./.next/static
 
 # Cambiar permisos
