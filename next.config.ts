@@ -1,7 +1,24 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Habilitar output standalone para Docker
+  output: 'standalone',
+
+  // Comprimir las respuestas
+  compress: true,
+
+  // Optimizaciones de producción
+  poweredByHeader: false,
+
+  // Configuración de imágenes
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

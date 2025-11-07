@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  contablix-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: contablix-landing:latest
+    container_name: contablix-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    # Descomentar si necesitas variables de entorno personalizadas
+    # env_file:
+    #   - .env.production
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - contablix-network
+    # Límites de recursos (ajustar según necesidad)
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+networks:
+  contablix-network:
+    driver: bridge
