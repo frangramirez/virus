@@ -1,0 +1,28 @@
+# Dockerfile ULTRA SIMPLE para EasyPanel
+# Usar este si Dockerfile.easypanel no funciona
+# No está optimizado, pero funciona siempre
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiar archivos del proyecto
+COPY package.json package-lock.json ./
+
+# Instalar TODAS las dependencias (incluidas devDependencies para el build)
+RUN npm install
+
+# Copiar el resto de los archivos
+COPY . .
+
+# Build de Next.js
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+RUN npm run build
+
+# Exponer puerto
+EXPOSE 3000
+
+# Comando de inicio usando npm start
+CMD ["npm", "start"]
